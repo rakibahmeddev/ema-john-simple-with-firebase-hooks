@@ -1,8 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
+  const navigate = useNavigate();
+
+  const handleEmailBlur = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordBlur = (event) => {
+    setPassword(event.target.value);
+  };
+
+  if (user) {
+    navigate("/shop");
+  }
+
+  const handleUserSignIn = (event) => {
+    event.preventDefault();
+    signInWithEmailAndPassword(email, password);
+  };
+
   return (
     <div className="form-container">
       <div>
@@ -12,16 +39,39 @@ const Login = () => {
             <label htmlFor="Email">
               Email <span>*</span>
             </label>
-            <input type="email" name="Email" id="" required />
+            <input
+              onBlur={handleEmailBlur}
+              type="email"
+              name="Email"
+              id=""
+              required
+            />
           </div>
           <div className="input-group">
             <label htmlFor="Password">
               Password <span>*</span>
             </label>
-            <input type="password" name="Password" id="" required />
+            <input
+              onBlur={handlePasswordBlur}
+              type="password"
+              name="Password"
+              id=""
+              required
+            />
+          </div>
+          {/* error message  */}
+          <div>
+            <p style={{ color: "red" }}>{error?.message}</p>
+
+            {loading && <p>Loading...</p>}
           </div>
           <div className="input-group">
-            <input className="form-submit" type="button" value="Login" />
+            <input
+              onClick={handleUserSignIn}
+              className="form-submit"
+              type="button"
+              value="Login"
+            />
           </div>
         </form>
         <div className="signup-in-login">
