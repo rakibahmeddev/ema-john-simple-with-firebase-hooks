@@ -1,27 +1,104 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./SignUp.css";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
 
 const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const [createUserWithEmailAndPassword, user] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const haleEmailBlur = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordBlur = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleConfirmPassword = (event) => {
+    setConfirmPassword(event.target.value);
+  };
+
+  if (user) {
+    navigate("/");
+  }
+
+  const handleCreateUser = (event) => {
+    event.preventDefault();
+    // validation
+    if (password !== confirmPassword) {
+      setError("Your both password should be same.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be 6 more characters.");
+      return;
+    }
+
+    createUserWithEmailAndPassword(email, password);
+  };
+
   return (
     <div className="form-container">
       <div>
         <h2 className="form-title">Sign Up</h2>
         <form>
           <div className="input-group">
-            <label htmlFor="Email">Email</label>
-            <input type="email" name="Email" id="" required />
+            <label htmlFor="Email">
+              Email <span>*</span>
+            </label>
+            <input
+              onBlur={haleEmailBlur}
+              type="email"
+              name="Email"
+              id=""
+              required
+            />
           </div>
           <div className="input-group">
-            <label htmlFor="Password">Password</label>
-            <input type="password" name="Password" id="" required />
+            <label htmlFor="Password">
+              Password <span>*</span>
+            </label>
+            <input
+              onBlur={handlePasswordBlur}
+              type="password"
+              name="Password"
+              id=""
+              required
+            />
           </div>
           <div className="input-group">
-            <label htmlFor="Confirm Password">Confirm Password</label>
-            <input type="password" name="Confirm Password" id="" required />
+            <label htmlFor="Confirm Password">
+              Confirm Password <span>*</span>
+            </label>
+            <input
+              onBlur={handleConfirmPassword}
+              type="password"
+              name="Confirm Password"
+              id=""
+              required
+            />
           </div>
+
+          {/* error massage  */}
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+
           <div className="input-group">
-            <input className="form-submit" type="button" value="Sign Up" />
+            <input
+              onClick={handleCreateUser}
+              className="form-submit"
+              type="button"
+              value="Sign Up"
+            />
           </div>
         </form>
         <div className="signup-in-login">

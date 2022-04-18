@@ -9,11 +9,15 @@ const Login = () => {
         <h2 className="form-title">Login</h2>
         <form>
           <div className="input-group">
-            <label htmlFor="Email">Email</label>
+            <label htmlFor="Email">
+              Email <span>*</span>
+            </label>
             <input type="email" name="Email" id="" required />
           </div>
           <div className="input-group">
-            <label htmlFor="Password">Password</label>
+            <label htmlFor="Password">
+              Password <span>*</span>
+            </label>
             <input type="password" name="Password" id="" required />
           </div>
           <div className="input-group">
