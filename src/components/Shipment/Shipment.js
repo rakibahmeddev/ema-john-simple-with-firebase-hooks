@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useCreateUserWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
+import auth from "../../firebase.init";
 
 const Shipment = () => {
+  const [user] = useAuthState(auth);
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const haleNameBlur = (event) => {
     setName(event.target.value);
-  };
-  const haleEmailBlur = (event) => {
-    setEmail(event.target.value);
   };
 
   const handleAddressBlur = (event) => {
@@ -27,6 +28,8 @@ const Shipment = () => {
 
   const handleShipping = (event) => {
     event.preventDefault();
+    // const shipping = { name, email, address, phone };
+    // console.log(shipping);
   };
 
   return (
@@ -36,7 +39,7 @@ const Shipment = () => {
         <form>
           <div className="input-group">
             <label htmlFor="name">
-              Your Name <span>*</span>
+              Your Name <span title="required">*</span>
             </label>
             <input
               onBlur={haleNameBlur}
@@ -51,7 +54,7 @@ const Shipment = () => {
               Email <span>*</span>
             </label>
             <input
-              onBlur={haleEmailBlur}
+              value={user?.email}
               type="text"
               name="Email"
               id=""
