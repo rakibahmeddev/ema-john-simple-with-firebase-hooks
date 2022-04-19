@@ -13,8 +13,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const from = location.state.from.pathname || "/";
+  // const location = useLocation();
+  // const from = location.state.from.pathname || "/";
   const handleEmailBlur = (event) => {
     setEmail(event.target.value);
   };
@@ -23,9 +23,9 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  if (user) {
-    navigate(from, { replace: true });
-  }
+  // if (user) {
+  //   navigate(from, { replace: true });
+  // }
 
   const handleUserSignIn = (event) => {
     event.preventDefault();
